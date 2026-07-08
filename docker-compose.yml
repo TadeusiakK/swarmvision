@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:17
+    container_name: swarmvision-db
+    environment:
+      POSTGRES_DB: swarmvision
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

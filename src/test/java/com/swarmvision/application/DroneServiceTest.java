@@ -14,6 +14,7 @@ import com.swarmvision.drone.application.DroneService;
 import com.swarmvision.drone.db.DroneRepository;
 import com.swarmvision.drone.domain.Drone;
 import com.swarmvision.drone.domain.Status;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -73,6 +74,33 @@ class DroneServiceTest {
     when(droneRepository.findById(id)).thenReturn(Optional.empty());
 
     assertThatThrownBy(() -> droneService.getDrone(id)).isInstanceOf(ResponseStatusException.class);
+  }
+
+  @Test
+  public void shouldGetAllDronesTest() {
+
+    Drone drone1 = new Drone();
+    Drone drone2 = new Drone();
+
+    when(droneRepository.findAll()).thenReturn(List.of(drone1, drone2));
+
+    DroneResponse resp1 =
+        new DroneResponse(UUID.randomUUID(), "d1", 1.0, "#FF0000", Status.IDLE, null, null);
+    DroneResponse resp2 =
+        new DroneResponse(UUID.randomUUID(), "d2", 2.0, "#00FF00", Status.ACTIVE, null, null);
+    when(droneResponseMapper.toResponse(drone1)).thenReturn(resp1);
+    when(droneResponseMapper.toResponse(drone2)).thenReturn(resp2);
+
+    List<DroneResponse> result = droneService.getAllDrones();
+
+    assertThat(result).containsExactly(resp1, resp2);
+  }
+
+  @Test
+  public void shouldNotGetAllDronesTest() {
+
+    when(droneRepository.findAll()).thenReturn(List.of());
+    assertThat(droneService.getAllDrones()).isEmpty();
   }
 
   @Test

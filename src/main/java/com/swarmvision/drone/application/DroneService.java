@@ -7,6 +7,7 @@ import com.swarmvision.drone.api.response.DroneResponse;
 import com.swarmvision.drone.db.DroneRepository;
 import com.swarmvision.drone.domain.Drone;
 import com.swarmvision.drone.domain.Status;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,13 @@ public class DroneService {
   public DroneService(DroneRepository droneRepository, DroneResponseMapper droneResponseMapper) {
     this.droneRepository = droneRepository;
     this.droneResponseMapper = droneResponseMapper;
+  }
+
+  public List<DroneResponse> getAllDrones() {
+
+    List<Drone> drones = droneRepository.findAll();
+
+    return drones.stream().map(d -> droneResponseMapper.toResponse(d)).toList();
   }
 
   public DroneResponse getDrone(UUID id) {

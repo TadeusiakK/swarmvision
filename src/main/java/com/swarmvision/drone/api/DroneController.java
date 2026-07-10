@@ -5,6 +5,7 @@ import com.swarmvision.drone.api.request.UpdateDroneRequest;
 import com.swarmvision.drone.api.response.DroneResponse;
 import com.swarmvision.drone.application.DroneService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,11 @@ public class DroneController {
 
   public DroneController(DroneService droneService) {
     this.droneService = droneService;
+  }
+
+  @GetMapping()
+  public List<DroneResponse> getAllDrones() {
+    return droneService.getAllDrones();
   }
 
   @GetMapping("/{id}")
